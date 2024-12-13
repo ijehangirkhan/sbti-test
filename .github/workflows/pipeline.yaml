@@ -1,0 +1,35 @@
+name: 'Build and Copy files to Storage Bucket'
+
+on:
+  push:
+    branches:
+      - '"main"'
+
+env:
+  PROJECT_ID: 'devops-project-123-444610' # TODO: update to your Google Cloud project ID
+  GAR_LOCATION: 'EUROPE-WEST3' # TODO: update to your region
+
+jobs:
+  setup-publish-copy:
+    name: 'Setup, Publish, and Copy'
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v4' # actions/checkout@v4
+
+      # Configure Workload Identity Federation and generate an access token.
+      #
+      # See https://github.com/google-github-actions/auth for more options,
+      # including authenticating via a JSON credentials file.
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2' # google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ env.GOOGLE_CLOUD_CREDENTIALS }}'
+
+      - id: 'upload-files'
+        uses: 'google-github-actions/upload-cloud-storage@v2'
+        with:
+          path: '.'
+          destination: 'devops-static-site-bucket'
