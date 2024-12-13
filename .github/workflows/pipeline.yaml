@@ -3,7 +3,7 @@ name: 'Build and Copy files to Storage Bucket'
 on:
   push:
     branches:
-      - '"main"'
+      - 'main'
 
 env:
   PROJECT_ID: 'devops-project-123-444610' # TODO: update to your Google Cloud project ID
